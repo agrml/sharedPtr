@@ -8,7 +8,7 @@ class SharedPtr
 {
 public:
     SharedPtr() = default;
-    explicit SharedPtr(const T* pVal);
+    explicit SharedPtr(T* const pVal);
     SharedPtr(const SharedPtr& other);
     ~SharedPtr();
 
@@ -22,7 +22,8 @@ private:
     T* pVal_{nullptr};
     size_t* pCnt_{nullptr};
 
-    FRIEND_TEST(SharedPtr, Internal);
+    FRIEND_TEST(Internals, defaultConstructor);
+    FRIEND_TEST(Internals, fromPtr);
 };
 
 
@@ -47,7 +48,7 @@ bool operator==(const SharedPtr<U>& lhs, const SharedPtr<U>& rhs)
 }
 
 template<typename T>
-SharedPtr<T>::SharedPtr(const T* pVal) : pVal_(pVal),
+SharedPtr<T>::SharedPtr(T* const pVal) : pVal_(pVal),
                                          pCnt_(new size_t{1}) {}
 
 template<typename T>
