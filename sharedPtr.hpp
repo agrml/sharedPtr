@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+
 #include <iostream>
 
 
@@ -19,6 +21,8 @@ public:
 private:
     T* pVal_{nullptr};
     size_t* pCnt_{nullptr};
+
+    FRIEND_TEST(SharedPtr, Internal);
 };
 
 

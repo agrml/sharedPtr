@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O0")
 
 set(SOURCE_FILES sharedPtr.hpp)
-add_executable(sharedPtr ${SOURCE_FILES} tests.cc)
+#add_executable(sharedPtr ${SOURCE_FILES} tests.cc)
 
 
 # Locate GTest

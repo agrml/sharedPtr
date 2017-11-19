@@ -1,11 +1,13 @@
 #include <gtest/gtest.h>
+#include "sharedPtr.hpp"
 
 
-TEST(Test, MinimalSharePtr)
+TEST(SharedPtr, Internal)
 {
-
+    auto a = SharedPtr<int>();
+    ASSERT_EQ(a.pVal_, nullptr);
+    ASSERT_EQ(a.pCnt_, nullptr);
 }
-
 
 int main(int argc, char *argv[])
 {
