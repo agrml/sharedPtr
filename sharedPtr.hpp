@@ -16,11 +16,14 @@ public:
 
     T& operator*();
     T* operator->();
+    SharedPtr<T>& operator=(const SharedPtr& rhs);
 
     template<class U>
     friend bool operator==(const SharedPtr<U> &lhs, const SharedPtr<U> &rhs);
 
 private:
+    void swap(const SharedPtr& other);
+
     T* pVal_{nullptr};
     size_t* pCnt_{nullptr};
 
@@ -68,5 +71,14 @@ SharedPtr<T>::~SharedPtr()
         delete pVal_;
         delete pCnt_;
     }
+}
+
+template<typename T>
+SharedPtr<T>& SharedPtr<T>::operator=(const SharedPtr &rhs)
+{
+    pVal_ = rhs.pVal_;
+    pCnt_ = rhs.pCnt_;
+    ++*pCnt_;
+    return *this;
 }
 

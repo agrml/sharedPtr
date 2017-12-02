@@ -43,7 +43,20 @@ TEST(API, comparision)
     ASSERT_FALSE(a == b);
 }
 
+TEST(API, assignment)
+{
+    SharedPtr<int> a{new int{0}};
+    SharedPtr<int> b{new int{0}};
+    a = b;
+    ASSERT_EQ(*a, *b);
+}
 
+//TEST(INTERNALS, nullptrCase)
+//{
+//    SharedPtr<int> a{nullptr};
+//    ASSERT_EQ(a.count(), 0);
+//    ASSERT_EQ(a.get(), nullptr);
+//}
 
 TEST(Internals, multipleOwnership)
 {
