@@ -8,6 +8,8 @@ class SharedPtr
 {
 public:
     SharedPtr() = default;
+    explicit SharedPtr(nullptr_t ptr) {}
+
     explicit SharedPtr(T* const pVal);
     SharedPtr(const SharedPtr& other);
     ~SharedPtr();
@@ -24,6 +26,7 @@ private:
 
     FRIEND_TEST(Internals, defaultConstructor);
     FRIEND_TEST(Internals, fromPtr);
+    FRIEND_TEST(Internals, multipleOwnership);
 };
 
 
@@ -61,13 +64,7 @@ SharedPtr<T>::SharedPtr(const SharedPtr& other) : pVal_(other.pVal_),
 template<typename T>
 SharedPtr<T>::~SharedPtr()
 {
-    if (pCnt_ == nullptr) {
-        return;
-    }
-    if (pVal_ == nullptr || *pCnt_ == 0) {
-        std::cout << "err" << std::endl;
-    }
-    if (--*pCnt_ == 0) {
+    if (pVal_ != nullptr && pCnt_ != nullptr && !--*pCnt_) {
         delete pVal_;
         delete pCnt_;
     }

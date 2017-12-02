@@ -4,7 +4,7 @@
 
 TEST(Internals, defaultConstructor)
 {
-    auto a = SharedPtr<int>();
+    SharedPtr<int> a{};
     EXPECT_EQ(a.pVal_, nullptr);
     EXPECT_EQ(a.pCnt_, nullptr);
 }
@@ -12,7 +12,8 @@ TEST(Internals, defaultConstructor)
 TEST(Internals, fromPtr)
 {
     constexpr int val = 32;
-    auto a = SharedPtr<int>{new int{val}};
+
+    SharedPtr<int> a{new int{val}};
     ASSERT_NE(a.pVal_, nullptr);
     ASSERT_NE(a.pCnt_, nullptr);
     EXPECT_EQ(*a.pCnt_, 1);
@@ -21,6 +22,41 @@ TEST(Internals, fromPtr)
     EXPECT_EQ(*a, val);
     ++*a;
     EXPECT_EQ(*a, val + 1);
+}
+
+TEST(API, fromClass)
+{
+    SharedPtr<std::pair<int, int>> a{new std::pair<int, int>{1, 2}};
+
+    EXPECT_EQ(a->first, 1);
+    EXPECT_EQ(a->second, 2);
+    EXPECT_EQ((*a).first, 1);
+    auto tmp = std::pair<int, int>{1, 2};
+    EXPECT_EQ(*a, tmp);
+}
+
+TEST(API, comparision)
+{
+
+    SharedPtr<int> a{new int{0}};
+    SharedPtr<int> b{new int{0}};
+    ASSERT_FALSE(a == b);
+}
+
+
+
+TEST(Internals, multipleOwnership)
+{
+    auto p = new int{0};
+    SharedPtr<int> a{p};
+    {
+        SharedPtr<int> b{p};
+        EXPECT_EQ(*a, *b);
+        EXPECT_EQ(*a.pCnt_, 1);
+        EXPECT_EQ(*b.pCnt_, 1);
+    }
+    EXPECT_EQ(*a.pCnt_, 1);
+    --*a.pCnt_;
 }
 
 int main(int argc, char *argv[])
